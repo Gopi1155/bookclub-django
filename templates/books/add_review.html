@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Review - BookClub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 text-end">
+        <a href="{% url 'books:book_detail' book.id %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-star me-2"></i>{% if is_edit %}Edit{% else %}Add{% endif %} Review</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-light border-start border-info border-4 mb-4">
+                    <p class="mb-0"><strong>Book:</strong> "{{ book.title }}" by {{ book.author.get_full_name }}</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-3">Your Rating</label>
+                        <div class="rating-selector" style="font-size: 2rem; display: flex; gap: 1rem;">
+                            {{ form.rating }}
+                        </div>
+                        {% if form.rating.errors %}
+                            <div class="text-danger small mt-2"><i class="fas fa-exclamation-circle"></i> {{ form.rating.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Your Feedback</label>
+                        <p class="text-muted small mb-2">Share your honest thoughts about this book</p>
+                        {{ form.feedback }}
+                        {% if form.feedback.errors %}
+                            <div class="text-danger small mt-2"><i class="fas fa-exclamation-circle"></i> {{ form.feedback.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger border-start border-danger border-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i>{{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button type="submit" class="btn btn-gradient flex-grow-1">
+                            <i class="fas fa-check-circle me-2"></i> Submit Review
+                        </button>
+                        <a href="{% url 'books:book_detail' book.id %}" class="btn btn-secondary flex-grow-1">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    input, textarea, select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    /* Style for radio buttons */
+    input[type="radio"] {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+{% endblock %}

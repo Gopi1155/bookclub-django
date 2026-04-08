@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Details - BookClub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 text-end">
+        <a href="{% url 'books:dashboard' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <!-- Book Cover -->
+    <div class="col-md-4">
+        <div class="card shadow-lg" style="border: none; overflow: hidden;">
+            {% if book.cover_image %}
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;">
+            {% else %}
+                <div style="height: 400px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-book" style="font-size: 4rem; color: #adb5bd;"></i>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Book Details -->
+    <div class="col-md-8">
+        <h1 style="color: #333; font-weight: bold; margin-bottom: 0.5rem;">{{ book.title }}</h1>
+        <p class="lead text-muted mb-4"><i class="fas fa-feather me-2"></i>By <strong style="color: #667eea;">{{ book.author.get_full_name }}</strong></p>
+        
+        <!-- Metadata Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p class="mb-1"><i class="fas fa-tag me-2" style="color: #667eea;"></i><small>Genre</small></p>
+                        <h6 class="fw-bold">{{ book.genre }}</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p class="mb-1"><i class="fas fa-language me-2" style="color: #764ba2;"></i><small>Language</small></p>
+                        <h6 class="fw-bold">{{ book.language }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% if book.pages %}
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p class="mb-1"><i class="fas fa-file-alt me-2" style="color: #f5576c;"></i><small>Pages</small></p>
+                        <h6 class="fw-bold">{{ book.pages }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if book.book_file %}
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p class="mb-1"><i class="fas fa-download me-2" style="color: #28a745;"></i><small>File Type</small></p>
+                        <h6 class="fw-bold">{{ book.book_file.name|slice:"-4:"|upper }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if book.publication_date %}
+            <div class="col-md-6 mb-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p class="mb-1"><i class="fas fa-calendar me-2" style="color: #4facfe;"></i><small>Published</small></p>
+                        <h6 class="fw-bold">{{ book.publication_date }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Rating Badge -->
+        <div class="alert alert-success border-start border-success border-4 mb-4">
+            <i class="fas fa-star me-2" style="color: #ffc107;"></i>
+            <strong>Average Rating:</strong>
+            {% if average_rating %}
+                <span style="font-size: 1.2rem; color: #ffc107;">{{ average_rating|floatformat:1 }} / 5</span>
+            {% else %}
+                <span class="text-muted">No reviews yet</span>
+            {% endif %}
+        </div>
+
+        <!-- Call to Action -->
+        {% if user.is_authenticated and user.user_type == 'reader' %}
+            <a href="{% url 'books:read_book' book.id %}" class="btn btn-success btn-lg w-100 mb-3" target="_blank">
+                <i class="fas fa-book-open me-2"></i>Read Book
+            </a>
+            <a href="{% url 'books:add_review' book.id %}" class="btn btn-gradient btn-lg w-100 mb-3">
+                <i class="fas fa-star me-2"></i>
+                {% if user_review %}Edit Your Review{% else %}Add A Review{% endif %}
+            </a>
+        {% else %}
+            <div class="alert alert-info border-start border-info border-4 mb-3">
+                <i class="fas fa-info-circle me-2"></i>
+                Please <a href="{% url 'users:reader_login' %}" class="link-gradient">login as a reader</a> to read this book and add a review.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<hr class="my-5">
+
+<!-- Description Section -->
+<div class="row mb-5">
+    <div class="col-md-12">
+        <h3 class="mb-3"><i class="fas fa-align-left me-2"></i>About This Book</h3>
+        <div class="card border-0" style="background-color: #f9f9f9; border-left: 4px solid #667eea;">
+            <div class="card-body">
+                <p class="card-text">{{ book.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<!-- Reviews Section -->
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="mb-4"><i class="fas fa-comments me-2"></i>Reviews & Feedback <span class="badge bg-primary">{{ reviews.count }}</span></h3>
+        
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h5 class="card-title mb-1"><i class="fas fa-user-circle me-2"></i>{{ review.reader.get_full_name }}</h5>
+                                <small class="text-muted"><i class="fas fa-calendar me-1"></i>{{ review.created_at|date:"M d, Y" }}</small>
+                            </div>
+                            <div class="rating-badge" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 0.5rem 0.75rem; border-radius: 8px; font-weight: bold;">
+                                <i class="fas fa-star me-1"></i>{{ review.rating }}/5
+                            </div>
+                        </div>
+                        <p class="card-text mt-3">{{ review.feedback }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info border-start border-info border-4 text-center py-4">
+                <i class="fas fa-inbox" style="font-size: 2rem; color: #0dcaf0;"></i>
+                <h5 class="mt-2">No Reviews Yet</h5>
+                <p class="mb-0 text-muted">Be the first to share your thoughts about this book!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .btn-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .link-gradient {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .link-gradient:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

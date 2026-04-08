@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BookClub{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: var(--primary-gradient);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            margin-left: 20px;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Container Styling */
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 25px;
+            padding: 0.7rem 1.5rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f5576c 0%, #ff6b6b 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+            color: white;
+        }
+
+        .btn-outline-secondary {
+            color: #667eea;
+            border: 2px solid #667eea;
+            background: white;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Forms */
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.7rem;
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 1.2rem;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
+            color: #0066cc;
+            border-left: 4px solid #4facfe;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(245, 87, 108, 0.1), rgba(255, 107, 107, 0.1));
+            color: #cc0000;
+            border-left: 4px solid #f5576c;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: #004499;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            color: #222;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #333;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        .lead {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Back Button Enhanced */
+        .back-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.3rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+            box-shadow: 0 -4px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-link {
+                margin-left: 0;
+                padding: 0.5rem 0;
+            }
+        }
+
+        /* Badge Styles */
+        .badge {
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        /* Shadow Utilities */
+        .shadow-lg {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        /* Input Group */
+        .input-group .form-control {
+            border-right: none;
+        }
+
+        .input-group .btn {
+            border-left: none;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .hero-section h1 {
+            color: white;
+            -webkit-text-fill-color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* Rating Stars */
+        .stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="{% url 'users:home' %}">
+                <i class="fas fa-book"></i> BookClub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% if user.user_type == 'reader' %}{% url 'books:dashboard' %}{% else %}{% url 'books:author_dashboard' %}{% endif %}">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:profile' %}">
+                                <i class="fas fa-user-circle"></i> Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:logout' %}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:reader_login' %}">
+                                <i class="fas fa-sign-in-alt"></i> Reader
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:author_login' %}">
+                                <i class="fas fa-pen"></i> Author
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="container-fluid">
+            <p>&copy; 2026 <strong>BookClub</strong> - Building Communities Through Reading</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Made with <i class="fas fa-heart"></i> for book lovers</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

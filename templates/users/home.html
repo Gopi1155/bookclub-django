@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - BookClub{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1><i class="fas fa-book-open"></i> Welcome to BookClub</h1>
+    <p>Discover, Share, and Review Books with Our Amazing Community</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-6 mx-auto">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 text-center h-100 role-card reader-card">
+                    <div class="card-body">
+                        <i class="fas fa-glasses" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                        <h5 class="card-title">I'm a Reader</h5>
+                        <p class="card-text text-muted">Browse thousands of books, read reviews, and share your thoughts</p>
+                        <div class="button-group">
+                            <a href="{% url 'users:reader_register' %}" class="btn btn-reader-register">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                            <a href="{% url 'users:reader_login' %}" class="btn btn-reader-login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 text-center h-100 role-card author-card">
+                    <div class="card-body">
+                        <i class="fas fa-pen-fancy" style="font-size: 3rem; color: #764ba2; margin-bottom: 1rem;"></i>
+                        <h5 class="card-title">I'm an Author</h5>
+                        <p class="card-text text-muted">Share your creations and connect with readers worldwide</p>
+                        <div class="button-group">
+                            <a href="{% url 'users:author_register' %}" class="btn btn-author-register">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                            <a href="{% url 'users:author_login' %}" class="btn btn-author-login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 pt-5">
+    <div class="col-md-4">
+        <div class="text-center">
+            <i class="fas fa-book" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h5>Growing Collection</h5>
+            <p class="text-muted">Discover books shared by our community authors</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="text-center">
+            <i class="fas fa-users" style="font-size: 2.5rem; color: #764ba2; margin-bottom: 1rem;"></i>
+            <h5>Active Community</h5>
+            <p class="text-muted">Join thousands of book lovers and authors</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="text-center">
+            <i class="fas fa-star" style="font-size: 2.5rem; color: #f5576c; margin-bottom: 1rem;"></i>
+            <h5>Rate & Review</h5>
+            <p class="text-muted">Share your opinions and help others find great reads</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Role Card Styling */
+    .role-card {
+        transition: all 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .role-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .reader-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border: 2px solid #667eea;
+    }
+
+    .author-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border: 2px solid #764ba2;
+    }
+
+    .role-card:hover .reader-card {
+        border-color: #5a67d8;
+    }
+
+    .role-card:hover .author-card {
+        border-color: #6b46c1;
+    }
+
+    /* Button Group Styling */
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    .button-group .btn {
+        min-width: 150px;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    /* Reader Buttons */
+    .btn-reader-register,
+    .btn-author-register {
+        padding: 0.9rem 1.8rem;
+        border-radius: 999px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        position: relative;
+        overflow: hidden;
+        text-transform: none;
+    }
+
+    .btn-reader-register {
+        background: linear-gradient(135deg, #5c7cfa 0%, #4f46e5 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 10px 25px rgba(92, 124, 250, 0.25);
+    }
+
+    .btn-reader-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(92, 124, 250, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-reader-register::before,
+    .btn-author-register::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        transition: left 0.45s ease;
+    }
+
+    .btn-reader-register:hover::before,
+    .btn-author-register:hover::before {
+        left: 100%;
+    }
+
+    .btn-reader-login,
+    .btn-author-login {
+        background: transparent;
+        border-radius: 999px;
+        font-weight: 700;
+        text-transform: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.9rem 1.8rem;
+        border: 2px solid;
+        position: relative;
+        overflow: hidden;
+        min-width: 150px;
+        white-space: nowrap;
+    }
+
+    .btn-reader-login {
+        color: #4f46e5;
+        border-color: #4f46e5;
+    }
+
+    .btn-reader-login:hover {
+        background: #4f46e5;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.18);
+        text-decoration: none;
+    }
+
+    .btn-author-register {
+        background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
+    }
+
+    .btn-author-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(124, 58, 237, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-author-login {
+        color: #7c3aed;
+        border-color: #7c3aed;
+    }
+
+    .btn-author-login:hover {
+        background: #7c3aed;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.18);
+        text-decoration: none;
+    }
+
+    /* Card Hover Effects */
+    .role-card .card-body {
+        transition: all 0.3s ease;
+    }
+
+    .role-card:hover .card-body {
+        transform: scale(1.02);
+    }
+
+    /* Icon Animation */
+    .role-card:hover .fas {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .button-group {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button-group .btn {
+            width: 100%;
+            max-width: 260px;
+            margin-bottom: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Book - BookClub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 text-end">
+        <a href="{% url 'books:author_dashboard' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-cloud-upload-alt me-2"></i>Publish Your Book</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4"><i class="fas fa-info-circle me-2"></i>Share your literary work with thousands of readers</p>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Basic Info -->
+                    <h5 class="mb-3"><i class="fas fa-book me-2" style="color: #667eea;"></i>Book Information</h5>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Book Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description</label>
+                        <p class="text-muted small">Write a compelling summary to attract readers</p>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details Row 1 -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Genre</label>
+                                {{ form.genre }}
+                                {% if form.genre.errors %}
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.genre.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Language</label>
+                                {{ form.language }}
+                                {% if form.language.errors %}
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.language.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details Row 2 -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Number of Pages</label>
+                                {{ form.pages }}
+                                {% if form.pages.errors %}
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.pages.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Publication Date</label>
+                                {{ form.publication_date }}
+                                {% if form.publication_date.errors %}
+                                    <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.publication_date.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Files -->
+                    <h5 class="mb-3"><i class="fas fa-files me-2" style="color: #764ba2;"></i>Book Files</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Book File</label>
+                        <p class="text-muted small">Supported formats: PDF, EPUB, MOBI</p>
+                        {{ form.book_file }}
+                        {% if form.book_file.errors %}
+                            <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.book_file.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Cover Image</label>
+                        <p class="text-muted small">Upload an attractive cover (JPG, PNG, recommended size: 300x400px)</p>
+                        {{ form.cover_image }}
+                        {% if form.cover_image.errors %}
+                            <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle"></i> {{ form.cover_image.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger border-start border-danger border-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i>{{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button type="submit" class="btn btn-gradient flex-grow-1 btn-lg">
+                            <i class="fas fa-check-circle me-2"></i> Publish Book
+                        </button>
+                        <a href="{% url 'books:author_dashboard' %}" class="btn btn-secondary flex-grow-1 btn-lg">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    input, textarea, select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    input[type="file"] {
+        border: 2px dashed #667eea;
+        padding: 1rem;
+    }
+</style>
+{% endblock %}

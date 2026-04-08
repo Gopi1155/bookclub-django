@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: bookclub
+    runtime: python3
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn bookclub.wsgi:application
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DJANGO_SETTINGS_MODULE
+        value: bookclub.settings
+      - key: PYTHON_VERSION
+        value: 3.12.6
+
+databases:
+  - name: bookclub-db
+    databaseName: bookclub
+    user: bookclub_user
